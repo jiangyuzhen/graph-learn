@@ -1,0 +1,16 @@
+{
+  "name": "graph",
+  "version": "1.0.0",
+  "description": "图论",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jane.zhen",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.2.1",
+    "readline-sync": "^1.4.9"
+  }
+}
