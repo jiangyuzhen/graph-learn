@@ -5,7 +5,7 @@ module.exports = class Stop {
         this.node = node;
         this.prev = prev;
 
-        this.next = next;
+        this.next = next || [];
 
         this.path = `${(prev && prev.path ? prev.path + '-' : '')}${node}`;
         this.depth = (prev) ? prev.depth + prev.next[node] : 0;

@@ -1,21 +1,33 @@
 'use strict';
 const Stop = require('./stop.class');
-const Untils = require('./untils');
-const rightpad = require('rightpad');
-const EOL = require('os').EOL;
+const utils = require('./utils');
 
 module.exports = class Graph {
     constructor(v, nodes) {
         this.nodes = nodes;
-        this.edges = this.initGraph(nodes); // 边集合
-        this.maxWeight = 0; // 所有边的权重之和
+        // 边集合
+        this.edges = this.initGraph(nodes); 
+        // 所有边的权重之和
+        this.maxWeight = 0; 
         this.result = [];
         this.initEdges(v);
-        // this.showGraph();
     }
 
-    destination(from, to, one) {
-        // from: 起始顶点 to: 结束点 one: 是否不能重复
+    /**
+     * @desc 寻找路径
+     * @param {string} from 起始顶点 t
+     * @param {string} to 结束点
+     * @param {boolean} one 是否不能重复
+     */
+    destination(from, to, one = false) {
+        if(!utils.isString(from)){
+            throw new Error('from not a string!');
+        }
+
+        if(!utils.isString(to)){
+            throw new Error('to not a string!');
+        }
+
         this.result = [];
         let fromStop = new Stop(from, null, this.edges[from]);
 
@@ -28,8 +40,13 @@ module.exports = class Graph {
         process.exit(0);
     }
 
+    /**
+     * @desc 递归遍历所有的可能的路径
+     * @param {object} stop 起始站对象
+     * @param {string} to 结束点
+     * @param {boolean} one 是否不能重复 
+     */
     reduce(stop, to, one) {
-        // stop: 起始站 to: 结束点 one: 是否不能重复
         if (stop.node === to && one) {
             return;
         }
@@ -56,9 +73,14 @@ module.exports = class Graph {
         }
     }
 
+     /**
+      * @desc 初始化二维数组
+      * @param {array} nodes 顶点集合
+      */
     initGraph(nodes) {
-        // 初始化二维数组
-        this.validationArray(nodes);
+        if (!nodes || !utils.isArray(nodes)) {
+            throw new Error('不是一个数组');
+        }
         let edges = [];
         nodes.forEach(item => {
             edges[item] = [];
@@ -73,42 +95,40 @@ module.exports = class Graph {
         return edges;
     }
 
+     /**
+      * @desc 添加某一个边
+      * @param {string} v 起点
+      * @param {string} w 终点
+      * @param {number} value 权值
+      */
     addEdge(v, w, value) {
-        // 添加某一个边
         this.edges[v][w] = value;
     }
 
+    /**
+     * @desc 给 graph 加权重
+     * @param {array} list 类似【'AB5', 'CE4'】这种格式的图数据
+     */
     initEdges(list) {
-        // 
-        this.validationArray(list);
+        if (!list || !utils.isArray(list)) {
+            throw new Error('不是一个数组');
+        }
         list && list.forEach(item => {
             this.maxWeight += Number(item[2]);
             this.addEdge(item[0], item[1], Number(item[2]));
         })
     }
 
-    showGraph() {
-        // 展示当前图的结构
-        let nodes = this.nodes;
-        let edges = this.edges;
-        console.log('你输入的 graph 的结构如下:' )
-        console.log(`备注：(null - 没有此路径; 0 - 自己到自己的距离)${EOL}`)
-        nodes.forEach(item => {
-            let str = rightpad(item, 8);
-            nodes.forEach(element => {
-                str += rightpad(edges[item][element], 8);
-            })
-            console.log(str);
-        })
-    }
-
+    /**
+     * @desc 求指定路径(类似：A-B-C)的距离
+     * @param {string} path 路径
+     */
     getSpecifiedPatDistance(path) {
-        // 求指定路径(类似：A-B-C)的距离
-        if (!path || !Untils.isString(path) || !Untils.testInput(/^([a-zA-Z]-)+[a-zA-Z]$/, path)) {
+        if (!path || !utils.isString(path) || !utils.testInput(/^([a-zA-Z]-)+[a-zA-Z]$/, path)) {
             throw new Error('请输入正确的格式');
         }
 
-        path = Untils.tirm(path).split('-');
+        path = utils.tirm(path).split('-');
 
         let result = {
             status: true,
@@ -129,12 +149,6 @@ module.exports = class Graph {
         }
 
         return result;
-    }
-
-    validationArray(list) {
-        if (!list || !Untils.isArray(list)) {
-            throw new Error('不是一个数组');
-        }
     }
 
 }

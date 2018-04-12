@@ -10,7 +10,7 @@
     - graph.class.js ------  图对象
     - index.js ------------  入口文件
     - stop.class.js -------  站对象
-    - untils.js -----------  工具函数
+    - utils.js -----------  工具函数
 - problem.md --------------  问题描述
 
 ### 项目运行

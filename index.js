@@ -1,21 +1,19 @@
-const fs = require('fs');
 const colors = require('colors');
 const EOL = require('os').EOL;
 const readline = require('readline-sync');
 const Graph = require('./src/graph.class.js');
-const Untils = require('./src/untils');
-const defaultInput = fs.readFileSync('./operation/graph.data.text').toString();
-const problem = fs.readFileSync('./operation/problem.list.text').toString();
+const utils = require('./src/utils');
+const defaultInput = utils.readFile('./operation/graph.data.text');
+const problem = utils.readFile('./operation/problem.list.text');
 
-console.log(colors.cyan(problem + EOL));
+console.log(colors.cyan(`${problem}${EOL}`));
 
-console.log(colors.red('For the test input, the towns are named using the first few letters of the alphabet from A to D.  A route between two towns (A to B) with a distance of 5 is represented as AB5.' + EOL));
-const GraphData = readline.question('the test input(default: ${defaultInput}): ', { defaultInput: defaultInput });
+console.log(colors.red(`For the test input, the towns are named using the first few letters of the alphabet from A to D.  A route between two towns (A to B) with a distance of 5 is represented as AB5${EOL}`));
+const GraphData = readline.question('the test input(default: ${defaultInput}): ', { defaultInput: defaultInput || '' });
 console.log(colors.yellow(`Graph：${GraphData}`));
 
-let data = Untils.FormData(GraphData)
+let data = utils.formatData(GraphData)
 const myGraph = new Graph(data.list, data.nodes);
-
 
 console.log(`${EOL}Expected Output:`);
 

@@ -1,4 +1,7 @@
 'use strict';
+const fs = require('fs')
+const path = require('path')
+
 // 内部函数, 用于判断对象类型
 function _getClass(object) {
     return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
@@ -26,8 +29,19 @@ function testInput(regex, str) {
     return regex.test(str);
 }
 
-// 格式化输入
-function FormData(data) {
+function readFile(filePath){
+    filePath = path.resolve(filePath);
+    if(!fs.existsSync(filePath)){
+        throw new Error(`${filePath} no exist!`);
+    }
+    return fs.readFileSync(filePath).toString();
+}
+
+/**
+ * @desc 格式化输入
+ * @param {string} data 
+ */
+function formatData(data) {
     if(!data || !isString(data)){
         throw new Error('请输入正确的格式');
     }
@@ -50,4 +64,4 @@ function FormData(data) {
 }
 
 
-module.exports = { isString, isArray, tirm, testInput, FormData };
+module.exports = { isString, isArray, tirm, testInput, formatData, readFile };
